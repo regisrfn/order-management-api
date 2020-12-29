@@ -1,0 +1,1 @@
+docker run --name order_management_db -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_DB=order_management -d postgres:alpine
