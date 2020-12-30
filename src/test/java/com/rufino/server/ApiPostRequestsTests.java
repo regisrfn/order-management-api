@@ -1,0 +1,45 @@
+package com.rufino.server;
+
+import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import org.hamcrest.core.Is;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class ApiPostRequestsTests {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void clearTable() {
+        jdbcTemplate.update("DELETE FROM ORDERS");
+    }
+
+    @Test
+    void itShouldSaveOrder() throws Exception {
+        JSONObject my_obj = new JSONObject();
+
+        my_obj.put("orderTotalValue", 1.99f);
+        my_obj.put("orderPaymentMethod", "card");
+        my_obj.put("orderNumber", 123123);
+        mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(1.99))).andExpect(status().isOk())
+                .andReturn();
+
+    }
+}

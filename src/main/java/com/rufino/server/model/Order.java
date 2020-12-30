@@ -7,6 +7,8 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="orders")
@@ -15,14 +17,17 @@ public class Order {
     @Id
     private UUID orderId;
 
+    @NotNull(message = "Value should not be empty")
     private Float orderTotalValue;
 
+    @NotBlank(message = "Value should not be empty")
     private String orderPaymentMethod;
 
     private String orderDescription;
 
     private ZonedDateTime orderCreatedAt;
 
+    @NotNull(message = "Value should not be empty")
     private Integer orderNumber;
 
     public UUID getOrderId() {
