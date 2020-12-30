@@ -42,4 +42,33 @@ public class ApiPostRequestsTests {
                 .andReturn();
 
     }
+
+    @Test
+    void itShouldNotSaveOrder_noPaymentMethod() throws Exception {
+        JSONObject my_obj = new JSONObject();
+
+        my_obj.put("orderTotalValue", 1.99f);
+        my_obj.put("orderNumber", 123123);
+        mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.orderPaymentMethod",
+                        Is.is("Value should not be empty")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
+                .andExpect(status().isBadRequest()).andReturn();
+
+        my_obj.put("orderPaymentMethod", "  ");
+        mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.orderPaymentMethod",
+                        Is.is("Value should not be empty")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
+                .andExpect(status().isBadRequest()).andReturn();
+
+        my_obj.put("orderPaymentMethod", null);
+        mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.orderPaymentMethod",
+                        Is.is("Value should not be empty")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
+                .andExpect(status().isBadRequest()).andReturn();
+
+    }
+
 }
