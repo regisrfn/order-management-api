@@ -3,6 +3,10 @@ package com.rufino.server;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.List;
+
 import com.rufino.server.model.Order;
 import com.rufino.server.service.OrderService;
 
@@ -26,6 +30,8 @@ class ServerApplicationTests {
 		jdbcTemplate.update("DELETE FROM orders");
 	}
 
+	//////////////////// SAVE ORDER/////////////////////////////////
+
 	@Test
 	void itShouldSaveIntoDb() {
 		Order order = new Order(18.99f, "Card", 123456);
@@ -43,12 +49,32 @@ class ServerApplicationTests {
 		}
 	}
 
+	//////////////////// GET ALL ORDERS/////////////////////////////////
+	@Test
+	void itShouldGetAllOrders() {
+		List<Order> ordersList = orderService.getAllOrders();
+		assertThat(ordersList.size()).isEqualTo(0);
+		saveAndAssert(new Order(1.99f, "card", 123456));
+		saveAndAssert(new Order(1.99f, "card", 1234567), 1, 2);
+
+		ordersList = orderService.getAllOrders();
+		assertThat(ordersList.size()).isEqualTo(2);
+	}
+
 	private void saveAndAssert(Order order) {
 		long countBeforeInsert = jdbcTemplate.queryForObject("select count(*) from orders", Long.class);
 		assertEquals(0, countBeforeInsert);
 		orderService.saveOrder(order);
 		long countAfterInsert = jdbcTemplate.queryForObject("select count(*) from orders", Long.class);
 		assertEquals(1, countAfterInsert);
+	}
+
+	private void saveAndAssert(Order order, int before, int after) {
+		long countBeforeInsert = jdbcTemplate.queryForObject("select count(*) from orders", Long.class);
+		assertEquals(before, countBeforeInsert);
+		orderService.saveOrder(order);
+		long countAfterInsert = jdbcTemplate.queryForObject("select count(*) from orders", Long.class);
+		assertEquals(after, countAfterInsert);
 	}
 
 }

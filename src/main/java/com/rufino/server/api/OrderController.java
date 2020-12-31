@@ -1,5 +1,7 @@
 package com.rufino.server.api;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import com.rufino.server.model.Order;
@@ -7,6 +9,7 @@ import com.rufino.server.service.OrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,11 @@ public class OrderController {
     @PostMapping
     public Order saveOrder(@Valid @RequestBody Order order) {
         return orderService.saveOrder(order);
+    }
+
+    @GetMapping
+    public List<Order>getAllOrders(){
+        return orderService.getAllOrders();
     }
 
 }
