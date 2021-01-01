@@ -1,6 +1,7 @@
 package com.rufino.server.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.rufino.server.model.Order;
 import com.rufino.server.repository.OrderRepository;
@@ -26,5 +27,8 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    public Order getOrderById(UUID id){
+        return orderRepository.findById(id).orElse(null);
+    }
 
 }
