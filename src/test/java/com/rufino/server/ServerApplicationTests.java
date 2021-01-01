@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.rufino.server.model.Order;
 import com.rufino.server.service.OrderService;
@@ -34,7 +35,7 @@ class ServerApplicationTests {
 	@Test
 	void itShouldSaveIntoDb() {
 		Order order = new Order();
-		setOrder(order,"cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		setOrder(order, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
 		saveAndAssert(order);
 	}
 
@@ -56,17 +57,46 @@ class ServerApplicationTests {
 		assertThat(ordersList.size()).isEqualTo(0);
 
 		Order order1 = new Order();
-		setOrder(order1,"cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		setOrder(order1, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
 		saveAndAssert(order1);
 
 		Order order2 = new Order();
-		setOrder(order2,"846e1a32-f831-4bee-a6bc-673b5f901d7b");		
+		setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
 		saveAndAssert(order2, 1, 2);
 
 		ordersList = orderService.getAllOrders();
 		assertThat(ordersList.size()).isEqualTo(2);
 	}
 
+	//////////////////// GET ORDER BY ID/////////////////////////////////
+	@Test
+	void itShouldGetAnOrder() {
+		Order order = new Order();
+		setOrder(order, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		saveAndAssert(order);
+
+		assertThat(orderService.getOrderById(order.getOrderId())).isNotEqualTo(null);
+
+		assertThat(orderService.getOrderById(order.getOrderId()).getCustomerId())
+				.isEqualTo(UUID.fromString("cba3ff2e-3087-49bd-bc9b-285e809e7b32"));
+
+		assertThat(orderService.getOrderById(order.getOrderId()).getOrderNumber()).isEqualTo(order.getOrderNumber());
+
+		assertThat(orderService.getOrderById(order.getOrderId()).getOrderPaymentMethod()).isEqualTo("card");
+
+	}
+
+	@Test
+	void itShouldNotGetAnOrder(){
+		Order order = new Order();
+		setOrder(order,"cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		saveAndAssert(order);
+		
+		assertThat(orderService.getOrderById(UUID.fromString("846e1a32-f831-4bee-a6bc-673b5f901d7b"))).isEqualTo(null);
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
 	private void saveAndAssert(Order order) {
 		long countBeforeInsert = jdbcTemplate.queryForObject("select count(*) from orders", Long.class);
 		assertEquals(0, countBeforeInsert);
