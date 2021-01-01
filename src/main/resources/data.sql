@@ -1,0 +1,27 @@
+DELETE FROM orders;
+DELETE FROM customers;
+
+INSERT INTO customers (
+        customer_id,
+        customer_name,
+        customer_last_name,
+        customer_phone,
+        customer_email,
+        customer_created_at
+    )
+VALUES (
+        'cba3ff2e-3087-49bd-bc9b-285e809e7b32',
+        'Joe',
+        'Doe',
+        '3379-1320',
+        'joe@gmail.com',
+        '2020-11-29T21:08:37Z'
+    ),
+    (
+        '846e1a32-f831-4bee-a6bc-673b5f901d7b',
+        'John',
+        'Doe',
+        '3379-1220',
+        'john@gmail.com',
+        '2020-11-29T21:08:37Z'
+    );

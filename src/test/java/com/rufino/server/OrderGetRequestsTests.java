@@ -56,8 +56,8 @@ public class OrderGetRequestsTests {
 
         assertThat(orderList.size()).isEqualTo(0);
 
-        saveAndAssert(new Order(1.99f, "card", 123456));
-        saveAndAssert(new Order(1.99f, "card", 1234567), 1, 2);
+        saveAndAssert(new Order("cba3ff2e-3087-49bd-bc9b-285e809e7b32", 1.99f, "card", 123456));
+        saveAndAssert(new Order("846e1a32-f831-4bee-a6bc-673b5f901d7b", 1.99f, "card", 123456), 1, 2);
 
         result = mockMvc
                 .perform(get("/api/v1/order/").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))

@@ -1,5 +1,6 @@
 package com.rufino.server;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,7 @@ public class OrderPostRequestsTests {
         void itShouldSaveOrder() throws Exception {
                 JSONObject my_obj = new JSONObject();
 
+                my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
                 my_obj.put("orderTotalValue", 1.99f);
                 my_obj.put("orderPaymentMethod", "card");
                 my_obj.put("orderNumber", 123123);
@@ -47,7 +49,7 @@ public class OrderPostRequestsTests {
         @Test
         void itShouldNotSaveOrder() throws Exception {
                 JSONObject my_obj = new JSONObject();
-
+                my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
                 my_obj.put("orderTotalValue", 1.99f);
                 my_obj.put("orderNumber", 123123);
                 mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
@@ -83,8 +85,34 @@ public class OrderPostRequestsTests {
                                                 Is.is("Value should not be empty")))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.errors.orderNumber",
                                                 Is.is("Value should not be empty")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.customerId",
+                                                Is.is("Invalid customer id format")))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
                                 .andExpect(status().isBadRequest()).andReturn();
+
+        }
+
+        @Test
+        void itShouldNotSaveOrder_invalidCustomerId() {
+                JSONObject my_obj = new JSONObject();
+                try {
+                        my_obj.put("customerId", "cba3ff2e");
+                        my_obj.put("orderPaymentMethod", "card");
+                        my_obj.put("orderTotalValue", 1.99f);
+                        my_obj.put("orderNumber", 123123);
+                        mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
+                                        .content(my_obj.toString()))
+                                        .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
+                                        .andExpect(MockMvcResultMatchers.jsonPath("$.errors.customerId",
+                                                        Is.is("Invalid customer id format")))
+                                        .andExpect(status().isBadRequest()).andReturn();
+                } catch (JSONException e) {
+                        assert (false);
+                        e.printStackTrace();
+                } catch (Exception e) {
+                        assert (false);
+                        e.printStackTrace();
+                }
 
         }
 
