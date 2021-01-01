@@ -99,24 +99,4 @@ public class Order {
         setOrderId(UUID.randomUUID());
     }
 
-    public Order(String customerId, Float orderTotalValue, String orderPaymentMethod, Integer orderNumber) {
-        this.orderTotalValue = orderTotalValue;
-        this.orderPaymentMethod = orderPaymentMethod;
-        this.orderNumber = orderNumber;
-        setOrderCreatedAt(ZonedDateTime.now(ZoneId.of("Z")));
-        setOrderId(UUID.randomUUID());
-        setCustomerId(customerId);
-    }
-
-    public Order(String customerId, Float orderTotalValue, String orderPaymentMethod, String orderDescription,
-            Integer orderNumber) {
-        this.orderTotalValue = orderTotalValue;
-        this.orderPaymentMethod = orderPaymentMethod;
-        this.orderDescription = orderDescription;
-        this.orderNumber = orderNumber;
-        setOrderCreatedAt(ZonedDateTime.now(ZoneId.of("Z")));
-        setOrderId(UUID.randomUUID());
-        setCustomerId(customerId);
-    }
-
 }

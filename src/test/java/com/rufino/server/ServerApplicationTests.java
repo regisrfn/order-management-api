@@ -33,7 +33,8 @@ class ServerApplicationTests {
 
 	@Test
 	void itShouldSaveIntoDb() {
-		Order order = new Order("cba3ff2e-3087-49bd-bc9b-285e809e7b32", 1.99f, "card", 123456);
+		Order order = new Order();
+		setOrder(order,"cba3ff2e-3087-49bd-bc9b-285e809e7b32");
 		saveAndAssert(order);
 	}
 
@@ -53,8 +54,15 @@ class ServerApplicationTests {
 	void itShouldGetAllOrders() {
 		List<Order> ordersList = orderService.getAllOrders();
 		assertThat(ordersList.size()).isEqualTo(0);
-		saveAndAssert(new Order("cba3ff2e-3087-49bd-bc9b-285e809e7b32", 1.99f, "card", 123456));
-		saveAndAssert(new Order("846e1a32-f831-4bee-a6bc-673b5f901d7b", 1.99f, "card", 123456), 1, 2);
+
+		Order order1 = new Order();
+		setOrder(order1,"cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		saveAndAssert(order1);
+
+		Order order2 = new Order();
+		setOrder(order2,"846e1a32-f831-4bee-a6bc-673b5f901d7b");		
+		saveAndAssert(order2, 1, 2);
+
 		ordersList = orderService.getAllOrders();
 		assertThat(ordersList.size()).isEqualTo(2);
 	}
@@ -73,6 +81,13 @@ class ServerApplicationTests {
 		orderService.saveOrder(order);
 		long countAfterInsert = jdbcTemplate.queryForObject("select count(*) from orders", Long.class);
 		assertEquals(after, countAfterInsert);
+	}
+
+	private void setOrder(Order order, String customerId) {
+		order.setCustomerId(customerId);
+		order.setOrderPaymentMethod("card");
+		order.setOrderTotalValue(1.99f);
+		order.setOrderNumber(123456);
 	}
 
 }
