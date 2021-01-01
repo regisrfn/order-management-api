@@ -34,6 +34,7 @@ public class OrderPostRequestsTests {
         void itShouldSaveOrder() throws Exception {
                 JSONObject my_obj = new JSONObject();
 
+                my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
                 my_obj.put("orderTotalValue", 1.99f);
                 my_obj.put("orderPaymentMethod", "card");
                 my_obj.put("orderNumber", 123123);
@@ -47,7 +48,7 @@ public class OrderPostRequestsTests {
         @Test
         void itShouldNotSaveOrder() throws Exception {
                 JSONObject my_obj = new JSONObject();
-
+                my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
                 my_obj.put("orderTotalValue", 1.99f);
                 my_obj.put("orderNumber", 123123);
                 mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
@@ -82,6 +83,8 @@ public class OrderPostRequestsTests {
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.errors.orderTotalValue",
                                                 Is.is("Value should not be empty")))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.errors.orderNumber",
+                                                Is.is("Value should not be empty")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.customerId",
                                                 Is.is("Value should not be empty")))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
                                 .andExpect(status().isBadRequest()).andReturn();

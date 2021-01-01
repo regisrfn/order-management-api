@@ -11,11 +11,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="orders")
+@Table(name = "orders")
 public class Order {
 
     @Id
     private UUID orderId;
+
+    @NotNull(message = "Value should not be empty")
+    private UUID customerId;
 
     @NotNull(message = "Value should not be empty")
     private Float orderTotalValue;
@@ -32,6 +35,14 @@ public class Order {
 
     public UUID getOrderId() {
         return orderId;
+    }
+
+    public UUID getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(UUID customerId) {
+        this.customerId = customerId;
     }
 
     public Float getOrderTotalValue() {
@@ -83,12 +94,24 @@ public class Order {
         setOrderId(UUID.randomUUID());
     }
 
-    public Order(Float orderTotalValue, String orderPaymentMethod, int orderNumber) {
+    public Order(String customerId, Float orderTotalValue, String orderPaymentMethod, Integer orderNumber) {
         this.orderTotalValue = orderTotalValue;
         this.orderPaymentMethod = orderPaymentMethod;
         this.orderNumber = orderNumber;
         setOrderCreatedAt(ZonedDateTime.now(ZoneId.of("Z")));
         setOrderId(UUID.randomUUID());
+        setCustomerId(UUID.fromString(customerId));
+    }
+
+    public Order(String customerId, Float orderTotalValue, String orderPaymentMethod, String orderDescription,
+            Integer orderNumber) {
+        this.orderTotalValue = orderTotalValue;
+        this.orderPaymentMethod = orderPaymentMethod;
+        this.orderDescription = orderDescription;
+        this.orderNumber = orderNumber;
+        setOrderCreatedAt(ZonedDateTime.now(ZoneId.of("Z")));
+        setOrderId(UUID.randomUUID());
+        setCustomerId(UUID.fromString(customerId));
     }
 
 }
