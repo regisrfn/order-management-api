@@ -6,13 +6,11 @@ import com.rufino.server.service.OrderService;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.hamcrest.core.Is;
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -47,11 +45,8 @@ public class OrderGetByIdRequestsTests {
 
     @Test
     void itShouldGetAnOrderById() throws Exception {
-        JSONObject my_obj = new JSONObject();
 
-        MvcResult result = mockMvc
-                .perform(get("/api/v1/order/").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
-                .andExpect(status().isOk()).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/v1/order/")).andExpect(status().isOk()).andReturn();
 
         List<Order> orderList = Arrays
                 .asList(objectMapper.readValue(result.getResponse().getContentAsString(), Order[].class));
@@ -66,18 +61,50 @@ public class OrderGetByIdRequestsTests {
         setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
         saveAndAssert(order2, 1, 2);
 
-        result = mockMvc
-                .perform(get("/api/v1/order/").contentType(MediaType.APPLICATION_JSON).content(my_obj.toString()))
-                .andExpect(status().isOk()).andReturn();
+        result = mockMvc.perform(get("/api/v1/order/")).andExpect(status().isOk()).andReturn();
 
         orderList = Arrays.asList(objectMapper.readValue(result.getResponse().getContentAsString(), Order[].class));
 
         assertThat(orderList.size()).isEqualTo(2);
 
-        mockMvc.perform(get("/api/v1/order/" + order1.getOrderId()).contentType(MediaType.APPLICATION_JSON)
-                .content(my_obj.toString())).andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(1.99)))
+        mockMvc.perform(get("/api/v1/order/" + order1.getOrderId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(1.99)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderId", Is.is(order1.getOrderId().toString())))
                 .andExpect(status().isOk()).andReturn();
+
+    }
+
+    @Test
+    void itShouldNotFoundOrder_invalidUUID() throws Exception {
+        Order order1 = new Order();
+        setOrder(order1, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+        saveAndAssert(order1);
+
+        Order order2 = new Order();
+        setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
+        saveAndAssert(order2, 1, 2);
+
+        mockMvc.perform(get("/api/v1/order/" + "abc"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.apiError", Is.is("Invalid user UUID format")))
+                .andExpect(status().isBadRequest()).andReturn();
+
+    }
+
+    @Test
+    void itShouldNotFoundOrder_NotExists() throws Exception {
+        Order order1 = new Order();
+        setOrder(order1, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+        saveAndAssert(order1);
+
+        Order order2 = new Order();
+        setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
+        saveAndAssert(order2, 1, 2);
+
+        mockMvc.perform(get("/api/v1/order/" + "8737659b-3b97-40c0-9529-f0741bba0eeb"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.apiError", Is.is("Order not found")))
+                .andExpect(status().isNotFound()).andReturn();
 
     }
 
