@@ -11,24 +11,32 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrderService {
-    
+
     private OrderRepository orderRepository;
 
     @Autowired
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
-    
-    public Order saveOrder(Order order){
+
+    public Order saveOrder(Order order) {
         return orderRepository.save(order);
     }
-    
-    public List<Order>getAllOrders(){
+
+    public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    public Order getOrderById(UUID id){
+    public Order getOrderById(UUID id) {
         return orderRepository.findById(id).orElse(null);
     }
 
+    public int deleteOrderById(UUID id){
+        try {
+            orderRepository.deleteById(id);
+            return 1;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 }
