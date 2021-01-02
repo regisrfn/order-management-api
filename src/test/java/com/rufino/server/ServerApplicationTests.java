@@ -87,12 +87,55 @@ class ServerApplicationTests {
 	}
 
 	@Test
-	void itShouldNotGetAnOrder(){
+	void itShouldNotGetAnOrder() {
 		Order order = new Order();
-		setOrder(order,"cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		setOrder(order, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
 		saveAndAssert(order);
-		
+
 		assertThat(orderService.getOrderById(UUID.fromString("846e1a32-f831-4bee-a6bc-673b5f901d7b"))).isEqualTo(null);
+
+	}
+
+	//////////////////// DELETE ORDER BY ID/////////////////////////////////
+	@Test
+	void itShouldDeleteOrderById() {
+
+		Order order1 = new Order();
+		setOrder(order1, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		saveAndAssert(order1);
+
+		Order order2 = new Order();
+		setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
+		saveAndAssert(order2, 1, 2);
+
+		List<Order> ordersList = orderService.getAllOrders();
+		assertThat(ordersList.size()).isEqualTo(2);
+
+		assertThat(orderService.deleteOrderById(order1.getOrderId())).isEqualTo(1);
+
+		ordersList = orderService.getAllOrders();
+		assertThat(ordersList.size()).isEqualTo(1);
+
+	}
+
+	@Test
+	void itShouldNotDeleteOrderById_orderNotFound() {
+
+		Order order1 = new Order();
+		setOrder(order1, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		saveAndAssert(order1);
+
+		Order order2 = new Order();
+		setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
+		saveAndAssert(order2, 1, 2);
+
+		List<Order> ordersList = orderService.getAllOrders();
+		assertThat(ordersList.size()).isEqualTo(2);
+
+		assertThat(orderService.deleteOrderById(UUID.randomUUID())).isEqualTo(0);
+
+		ordersList = orderService.getAllOrders();
+		assertThat(ordersList.size()).isEqualTo(2);
 
 	}
 
