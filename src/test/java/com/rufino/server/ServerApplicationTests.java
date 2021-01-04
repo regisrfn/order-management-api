@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.List;
 import java.util.UUID;
 
+import com.rufino.server.exception.ApiRequestException;
 import com.rufino.server.model.Order;
 import com.rufino.server.service.OrderService;
 
@@ -139,7 +140,7 @@ class ServerApplicationTests {
 
 	}
 
-	//////////////////// DELETE ORDER BY ID/////////////////////////////////
+	//////////////////// UPDATE ORDER BY ID/////////////////////////////////
 	@Test
 	void itShouldUpdateOrder() {
 
@@ -151,14 +152,62 @@ class ServerApplicationTests {
 		setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
 		saveAndAssert(order2, 1, 2);
 
-		order1.setOrderPaymentMethod("cash");
-		orderService.updateOrder(order1);
+		Order orderToUpdate = new Order();
+		orderToUpdate.setOrderId(null);
+		orderToUpdate.setOrderPaymentMethod("cash");
+		orderToUpdate.setOrderTotalValue(5.00f);
+		orderToUpdate.setCustomerId("846e1a32-f831-4bee-a6bc-673b5f901d7b");
+		orderToUpdate.setOrderDescription("Description test");
+		orderToUpdate.setOrderNumber(654321);
+		orderService.updateOrder(order1.getOrderId(), orderToUpdate);
 
+		assertThat(orderService.getOrderById(order1.getOrderId()).getCustomerId())
+				.isEqualTo(UUID.fromString("846e1a32-f831-4bee-a6bc-673b5f901d7b"));
 		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderPaymentMethod()).isEqualTo("cash");
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderTotalValue()).isEqualTo(5.00f);
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderCreatedAt())
+				.isEqualTo(orderToUpdate.getOrderCreatedAt());
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderDescription())
+				.isEqualTo(orderToUpdate.getOrderDescription());
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderNumber())
+				.isEqualTo(orderToUpdate.getOrderNumber());
+
+		orderToUpdate = new Order();
+		orderToUpdate.setOrderId(null);
+		orderToUpdate.setOrderCreatedAt(null);
+		orderToUpdate.setCustomerId("cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		orderService.updateOrder(order1.getOrderId(), orderToUpdate);
+
 		assertThat(orderService.getOrderById(order1.getOrderId()).getCustomerId())
 				.isEqualTo(UUID.fromString("cba3ff2e-3087-49bd-bc9b-285e809e7b32"));
-		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderTotalValue()).isEqualTo(1.99f);
 
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderPaymentMethod()).isEqualTo("cash");
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderTotalValue()).isEqualTo(5.00f);
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderDescription()).isEqualTo("Description test");
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderNumber()).isEqualTo(654321);
+
+	}
+
+	@Test
+	void itShouldUpdateOrder_customerNotExists() {
+		Order order1 = new Order();
+		setOrder(order1, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		saveAndAssert(order1);
+
+		Order order2 = new Order();
+		setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
+		saveAndAssert(order2, 1, 2);
+
+		Order orderToUpdate = new Order();
+		orderToUpdate.setOrderId(null);
+		orderToUpdate.setOrderCreatedAt(null);
+
+		orderToUpdate.setCustomerId("c6586b2e-a943-481f-a4e3-e768aff9e029");
+		try {
+			orderService.updateOrder(order1.getOrderId(), orderToUpdate);
+		} catch (ApiRequestException e) {
+			// TODO: handle exception
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
