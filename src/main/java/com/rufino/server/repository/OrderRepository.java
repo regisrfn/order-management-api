@@ -46,8 +46,7 @@ public class OrderRepository implements OrderDao {
     }
 
     @Override
-    public Order updateOrder(UUID id, Order order) {
-        // TODO Auto-generated method stub
-        return null;
+    public Order updateOrder(Order order) {
+        return jpaDataAccess.save(order);
     }
 }

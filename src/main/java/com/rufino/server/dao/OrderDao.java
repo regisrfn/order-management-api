@@ -14,5 +14,5 @@ public interface OrderDao {
 
     Order getOrder(UUID id);
 
-    Order updateOrder(UUID id, Order order);
+    Order updateOrder(Order order);
 }

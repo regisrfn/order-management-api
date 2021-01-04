@@ -139,6 +139,28 @@ class ServerApplicationTests {
 
 	}
 
+	//////////////////// DELETE ORDER BY ID/////////////////////////////////
+	@Test
+	void itShouldUpdateOrder() {
+
+		Order order1 = new Order();
+		setOrder(order1, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+		saveAndAssert(order1);
+
+		Order order2 = new Order();
+		setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
+		saveAndAssert(order2, 1, 2);
+
+		order1.setOrderPaymentMethod("cash");
+		orderService.updateOrder(order1);
+
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderPaymentMethod()).isEqualTo("cash");
+		assertThat(orderService.getOrderById(order1.getOrderId()).getCustomerId())
+				.isEqualTo(UUID.fromString("cba3ff2e-3087-49bd-bc9b-285e809e7b32"));
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderTotalValue()).isEqualTo(1.99f);
+
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////
 	private void saveAndAssert(Order order) {
 		long countBeforeInsert = jdbcTemplate.queryForObject("select count(*) from orders", Long.class);

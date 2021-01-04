@@ -31,7 +31,11 @@ public class OrderService {
         return orderDao.getOrder(id);
     }
 
-    public int deleteOrderById(UUID id){
+    public int deleteOrderById(UUID id) {
         return orderDao.deleteOrder(id);
+    }
+
+    public Order updateOrder(Order order) {
+        return orderDao.updateOrder(order);
     }
 }
