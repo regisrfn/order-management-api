@@ -10,8 +10,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 @Entity
 @Table(name = "orders")
+@JsonInclude(Include.NON_NULL)
 public class Order {
 
     @Id
@@ -28,6 +32,7 @@ public class Order {
 
     private String orderDescription;
 
+    @NotNull(message = "Value should not be empty")
     private ZonedDateTime orderCreatedAt;
 
     @NotNull(message = "Value should not be empty")
@@ -86,11 +91,11 @@ public class Order {
         this.orderCreatedAt = orderCreatedAt;
     }
 
-    public int getOrderNumber() {
+    public Integer getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(int orderNumber) {
+    public void setOrderNumber(Integer orderNumber) {
         this.orderNumber = orderNumber;
     }
 

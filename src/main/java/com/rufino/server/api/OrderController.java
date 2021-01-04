@@ -13,11 +13,13 @@ import com.rufino.server.service.OrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,6 +70,40 @@ public class OrderController {
                 throw new ApiRequestException("Order not found", HttpStatus.NOT_FOUND);
             message.put("message", "successfully operation");
             return message;
+        } catch (IllegalArgumentException e) {
+            throw new ApiRequestException("Invalid user UUID format", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("{id}")
+    public Order updateOrder(@PathVariable String id, @Valid Order order, BindingResult bindingResult) {
+        try {
+            UUID orderId = UUID.fromString(id);
+            Order validatedOrder = orderService.getOrderById(orderId);
+            if (order == null)
+                throw new ApiRequestException("Order not found", HttpStatus.NOT_FOUND);
+            if (bindingResult.hasErrors()) {
+                // ignore field password
+                if (!bindingResult.hasFieldErrors("customerId")) {
+                    validatedOrder.setCustomerId(order.getCustomerId().toString());
+                }
+                if (!bindingResult.hasFieldErrors("orderTotalValue")) {
+                    validatedOrder.setOrderTotalValue(order.getOrderTotalValue());
+                }
+                if (!bindingResult.hasFieldErrors("orderPaymentMethod")) {
+                    validatedOrder.setOrderPaymentMethod(order.getOrderPaymentMethod());
+                }
+                if (!bindingResult.hasFieldErrors("orderNumber")) {
+                    validatedOrder.setOrderNumber(order.getOrderNumber());
+                }
+                if (!bindingResult.hasFieldErrors("orderCreatedAt")) {
+                    validatedOrder.setOrderCreatedAt(order.getOrderCreatedAt());
+                }
+                validatedOrder.setOrderDescription(order.getOrderDescription());
+            } else {
+                order.setOrderId(validatedOrder.getOrderId());
+            }
+            return null;
         } catch (IllegalArgumentException e) {
             throw new ApiRequestException("Invalid user UUID format", HttpStatus.BAD_REQUEST);
         }

@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import com.rufino.server.dao.OrderDao;
+import com.rufino.server.exception.ApiRequestException;
 import com.rufino.server.model.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,7 +38,12 @@ public class OrderService {
         return orderDao.deleteOrder(id);
     }
 
-    public Order updateOrder(Order order) {
-        return orderDao.updateOrder(order);
+    public Order updateOrder(UUID id, Order order) {
+        try {
+            return orderDao.updateOrder(id, order);
+        } catch (DataIntegrityViolationException e) {
+            throw new ApiRequestException(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }
