@@ -80,12 +80,10 @@ public class OrderController {
         try {
             UUID orderId = UUID.fromString(id);
             Order validatedOrder = new Order();
-            validatedOrder.setOrderId(null);
 
             if (hasErrorsOrderRequest(order, bindingResult, validatedOrder))
                 return orderService.updateOrder(orderId, validatedOrder);
 
-            order.setOrderId(null);
             return orderService.updateOrder(orderId, order);
 
         } catch (IllegalArgumentException e) {

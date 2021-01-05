@@ -153,7 +153,6 @@ class ServerApplicationTests {
 		saveAndAssert(order2, 1, 2);
 
 		Order orderToUpdate = new Order();
-		orderToUpdate.setOrderId(null);
 		orderToUpdate.setOrderPaymentMethod("cash");
 		orderToUpdate.setOrderTotalValue(5.00f);
 		orderToUpdate.setCustomerId("846e1a32-f831-4bee-a6bc-673b5f901d7b");
@@ -173,8 +172,6 @@ class ServerApplicationTests {
 				.isEqualTo(orderToUpdate.getOrderNumber());
 
 		orderToUpdate = new Order();
-		orderToUpdate.setOrderId(null);
-		orderToUpdate.setOrderCreatedAt(null);
 		orderToUpdate.setCustomerId("cba3ff2e-3087-49bd-bc9b-285e809e7b32");
 		orderService.updateOrder(order1.getOrderId(), orderToUpdate);
 
@@ -189,7 +186,7 @@ class ServerApplicationTests {
 	}
 
 	@Test
-	void itShouldUpdateOrder_customerNotExists() {
+	void itShouldNotUpdateOrder_customerNotExists() {
 		Order order1 = new Order();
 		setOrder(order1, "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
 		saveAndAssert(order1);
@@ -199,9 +196,6 @@ class ServerApplicationTests {
 		saveAndAssert(order2, 1, 2);
 
 		Order orderToUpdate = new Order();
-		orderToUpdate.setOrderId(null);
-		orderToUpdate.setOrderCreatedAt(null);
-
 		orderToUpdate.setCustomerId("c6586b2e-a943-481f-a4e3-e768aff9e029");
 		try {
 			orderService.updateOrder(order1.getOrderId(), orderToUpdate);

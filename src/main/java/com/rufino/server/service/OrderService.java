@@ -40,6 +40,7 @@ public class OrderService {
 
     public Order updateOrder(UUID id, Order order) {
         try {
+            order.setOrderId(null);
             return orderDao.updateOrder(id, order);
         } catch (DataIntegrityViolationException e) {
             throw new ApiRequestException(e.getMessage(), HttpStatus.BAD_REQUEST);
