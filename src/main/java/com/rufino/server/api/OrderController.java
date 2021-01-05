@@ -80,12 +80,10 @@ public class OrderController {
         try {
             UUID orderId = UUID.fromString(id);
             Order validatedOrder = new Order();
-            validatedOrder.setOrderId(null);
 
             if (hasErrorsOrderRequest(order, bindingResult, validatedOrder))
                 return orderService.updateOrder(orderId, validatedOrder);
 
-            order.setOrderId(null);
             return orderService.updateOrder(orderId, order);
 
         } catch (IllegalArgumentException e) {
@@ -96,7 +94,7 @@ public class OrderController {
     private boolean hasErrorsOrderRequest(Order order, BindingResult bindingResult, Order validatedOrder) {
         if (bindingResult.hasErrors()) {
             // ignore field password
-            if (!bindingResult.hasFieldErrors("customerId")) {
+            if (!bindingResult.hasFieldErrors("customerId")) { 
                 validatedOrder.setCustomerId(order.getCustomerId().toString());
             }
             if (!bindingResult.hasFieldErrors("orderTotalValue")) {

@@ -49,10 +49,9 @@ public class Order {
     public void setCustomerId(String customerId) {
         try {
             this.customerId = UUID.fromString(customerId);
-        } catch (Exception e) {
-            // e.printStackTrace();
+        } catch (IllegalArgumentException e) {
         }
-       
+
     }
 
     public Float getOrderTotalValue() {
