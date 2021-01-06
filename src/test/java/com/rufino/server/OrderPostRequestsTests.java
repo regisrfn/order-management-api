@@ -47,6 +47,25 @@ public class OrderPostRequestsTests {
         }
 
         @Test
+        void itShouldSaveOrder_withId() throws Exception {
+                JSONObject my_obj = new JSONObject();
+
+                my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+                my_obj.put("orderTotalValue", 1.99f);
+                my_obj.put("orderPaymentMethod", "card");
+                my_obj.put("orderNumber", 123123);
+                my_obj.put("orderId", "40d067ae-0fbd-4bb8-b306-65ac40737aaa");
+
+                
+                mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
+                                .content(my_obj.toString()))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(1.99)))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.orderId", Is.is("40d067ae-0fbd-4bb8-b306-65ac40737aaa")))
+                                .andExpect(status().isOk()).andReturn();
+
+        }
+
+        @Test
         void itShouldNotSaveOrder() throws Exception {
                 JSONObject my_obj = new JSONObject();
                 my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
