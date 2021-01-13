@@ -57,7 +57,7 @@ public class OrderPutRequestTests {
                 .andExpect(
                         MockMvcResultMatchers.jsonPath("$.customerId", Is.is("846e1a32-f831-4bee-a6bc-673b5f901d7b")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(5.99)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.orderPaymentMethod", Is.is("cash")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderPaymentMethod", Is.is("CASH")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderNumber", Is.is(123123))).andExpect(status().isOk())
                 .andReturn();
 
@@ -69,7 +69,7 @@ public class OrderPutRequestTests {
                 .andExpect(
                         MockMvcResultMatchers.jsonPath("$.customerId", Is.is("cba3ff2e-3087-49bd-bc9b-285e809e7b32")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(5.99)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.orderPaymentMethod", Is.is("cash")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderPaymentMethod", Is.is("CASH")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderNumber", Is.is(123123))).andExpect(status().isOk())
                 .andReturn();
 
@@ -80,7 +80,7 @@ public class OrderPutRequestTests {
                 .andExpect(
                         MockMvcResultMatchers.jsonPath("$.customerId", Is.is("cba3ff2e-3087-49bd-bc9b-285e809e7b32")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(0.99)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.orderPaymentMethod", Is.is("cash")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderPaymentMethod", Is.is("CASH")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderNumber", Is.is(123123))).andExpect(status().isOk())
                 .andReturn();
     }
@@ -107,7 +107,7 @@ public class OrderPutRequestTests {
                 .andExpect(
                         MockMvcResultMatchers.jsonPath("$.customerId", Is.is("cba3ff2e-3087-49bd-bc9b-285e809e7b32")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(5.99)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.orderPaymentMethod", Is.is("cash")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderPaymentMethod", Is.is("CASH")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderNumber", Is.is(123123))).andExpect(status().isOk())
                 .andReturn();
     }
@@ -130,7 +130,7 @@ public class OrderPutRequestTests {
 
     private void setOrder(Order order, String customerId) {
         order.setCustomerId(customerId);
-        order.setOrderPaymentMethod("card");
+        order.setOrderPaymentMethod("credit_card");
         order.setOrderTotalValue(1.99f);
         order.setOrderNumber(123456);
     }

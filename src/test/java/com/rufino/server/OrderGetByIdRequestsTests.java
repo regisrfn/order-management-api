@@ -126,7 +126,7 @@ public class OrderGetByIdRequestsTests {
 
     private void setOrder(Order order, String customerId) {
         order.setCustomerId(customerId);
-        order.setOrderPaymentMethod("card");
+        order.setOrderPaymentMethod("credit_card");
         order.setOrderTotalValue(1.99f);
         order.setOrderNumber(123456);
     }

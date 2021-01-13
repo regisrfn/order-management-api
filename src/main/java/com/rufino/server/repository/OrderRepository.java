@@ -81,7 +81,7 @@ public class OrderRepository implements OrderDao {
         }
         while (keys.hasNext()) {
             String key = keys.next();
-            if (key.equals("orderPaymentMethod") || key.equals("orderDescription") || key.equals("customerId"))
+            if (key.equals("orderDescription") || key.equals("customerId"))
                 sql = sql + key.replaceAll("([A-Z])", "_$1").toLowerCase() + "='" + jsonObject.get(key) + "' ";
             else if (key.equals("orderCreatedAt"))
                 sql = sql + key.replaceAll("([A-Z])", "_$1").toLowerCase() + "='" + order.getOrderCreatedAt().toString()
@@ -89,6 +89,9 @@ public class OrderRepository implements OrderDao {
             else if (key.equals("orderId"))
                 sql = sql + key.replaceAll("([A-Z])", "_$1").toLowerCase() + "='" + order.getOrderId().toString()
                         + "' ";
+            else if (key.equals("orderPaymentMethod"))
+                sql = sql + key.replaceAll("([A-Z])", "_$1").toLowerCase() + "=" + order.getOrderPaymentMethod().ordinal()
+                        + " ";
             else
                 sql = sql + key.replaceAll("([A-Z])", "_$1").toLowerCase() + "=" + jsonObject.get(key) + " ";
 

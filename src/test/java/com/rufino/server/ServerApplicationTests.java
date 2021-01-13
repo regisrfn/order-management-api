@@ -83,7 +83,7 @@ class ServerApplicationTests {
 
 		assertThat(orderService.getOrderById(order.getOrderId()).getOrderNumber()).isEqualTo(order.getOrderNumber());
 
-		assertThat(orderService.getOrderById(order.getOrderId()).getOrderPaymentMethod()).isEqualTo("card");
+		assertThat(orderService.getOrderById(order.getOrderId()).getOrderPaymentMethod().toString()).isEqualTo("CREDIT_CARD");
 
 	}
 
@@ -162,7 +162,7 @@ class ServerApplicationTests {
 
 		assertThat(orderService.getOrderById(order1.getOrderId()).getCustomerId())
 				.isEqualTo(UUID.fromString("846e1a32-f831-4bee-a6bc-673b5f901d7b"));
-		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderPaymentMethod()).isEqualTo("cash");
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderPaymentMethod().toString()).isEqualTo("CASH");
 		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderTotalValue()).isEqualTo(5.00f);
 		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderCreatedAt())
 				.isEqualTo(orderToUpdate.getOrderCreatedAt());
@@ -178,7 +178,7 @@ class ServerApplicationTests {
 		assertThat(orderService.getOrderById(order1.getOrderId()).getCustomerId())
 				.isEqualTo(UUID.fromString("cba3ff2e-3087-49bd-bc9b-285e809e7b32"));
 
-		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderPaymentMethod()).isEqualTo("cash");
+		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderPaymentMethod().toString()).isEqualTo("CASH");
 		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderTotalValue()).isEqualTo(5.00f);
 		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderDescription()).isEqualTo("Description test");
 		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderNumber()).isEqualTo(654321);
@@ -223,7 +223,7 @@ class ServerApplicationTests {
 
 	private void setOrder(Order order, String customerId) {
 		order.setCustomerId(customerId);
-		order.setOrderPaymentMethod("card");
+		order.setOrderPaymentMethod("credit_card");
 		order.setOrderTotalValue(1.99f);
 		order.setOrderNumber(123456);
 	}

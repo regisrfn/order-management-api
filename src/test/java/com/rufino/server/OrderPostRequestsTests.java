@@ -37,7 +37,7 @@ public class OrderPostRequestsTests {
 
                 my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
                 my_obj.put("orderTotalValue", 1.99f);
-                my_obj.put("orderPaymentMethod", "card");
+                my_obj.put("orderPaymentMethod", "credit_card");
                 my_obj.put("orderNumber", 123123);
                 mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
                                 .content(my_obj.toString()))
@@ -52,7 +52,7 @@ public class OrderPostRequestsTests {
 
                 my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
                 my_obj.put("orderTotalValue", 1.99f);
-                my_obj.put("orderPaymentMethod", "card");
+                my_obj.put("orderPaymentMethod", "credit_card");
                 my_obj.put("orderNumber", 123123);
                 my_obj.put("orderId", "40d067ae-0fbd-4bb8-b306-65ac40737aaa");
 
@@ -116,7 +116,7 @@ public class OrderPostRequestsTests {
                 JSONObject my_obj = new JSONObject();
                 try {
                         my_obj.put("customerId", "cba3ff2e");
-                        my_obj.put("orderPaymentMethod", "card");
+                        my_obj.put("orderPaymentMethod", "credit_card");
                         my_obj.put("orderTotalValue", 1.99f);
                         my_obj.put("orderNumber", 123123);
                         mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
