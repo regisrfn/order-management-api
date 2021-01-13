@@ -7,7 +7,6 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -27,8 +26,8 @@ public class Order {
     @NotNull(message = "Value should not be empty")
     private Float orderTotalValue;
 
-    @NotBlank(message = "Value should not be empty")
-    private String orderPaymentMethod;
+    @NotNull(message = "Value should not be empty")
+    private PaymentCategory orderPaymentMethod;
 
     private String orderDescription;
 
@@ -66,11 +65,20 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public String getOrderPaymentMethod() {
+    public PaymentCategory getOrderPaymentMethod() {
         return orderPaymentMethod;
     }
 
     public void setOrderPaymentMethod(String orderPaymentMethod) {
+        try {
+            this.orderPaymentMethod = PaymentCategory.valueOf(orderPaymentMethod.toUpperCase());
+        } catch (Exception e) {
+            this.orderPaymentMethod= null;
+        }
+
+    }
+
+    public void setOrderPaymentMethod(PaymentCategory orderPaymentMethod) {
         this.orderPaymentMethod = orderPaymentMethod;
     }
 
@@ -101,6 +109,10 @@ public class Order {
     public Order() {
         setOrderCreatedAt(ZonedDateTime.now(ZoneId.of("Z")));
         setOrderId(UUID.randomUUID());
+    }
+
+    public enum PaymentCategory {
+        CASH, CHECK, DEBIT_CARD, CREDIT_CARD, MOBILE, BANK_TRANSFER
     }
 
 }
