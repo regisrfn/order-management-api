@@ -54,13 +54,43 @@ public class OrderPostRequestsTests {
                 my_obj.put("orderTotalValue", 1.99f);
                 my_obj.put("orderPaymentMethod", "credit_card");
                 my_obj.put("orderNumber", 123123);
-                my_obj.put("orderId", "40d067ae-0fbd-4bb8-b306-65ac40737aaa");
+                my_obj.put("orderId", "d0ba6751-90a2-4c50-9661-aecd8360188e");
 
-                
                 mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
                                 .content(my_obj.toString()))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(1.99)))
-                                .andExpect(MockMvcResultMatchers.jsonPath("$.orderId", Is.is("40d067ae-0fbd-4bb8-b306-65ac40737aaa")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.orderId",
+                                                Is.is("d0ba6751-90a2-4c50-9661-aecd8360188e")))
+                                .andExpect(status().isOk()).andReturn();
+
+                my_obj = new JSONObject();
+
+                my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+                my_obj.put("orderTotalValue", 1.99f);
+                my_obj.put("orderPaymentMethod", "credit_card");
+                my_obj.put("orderNumber", 123123);
+                my_obj.put("orderId", "c6586b2e-a943-481f-a4e3-e768aff9e029");
+
+                mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
+                                .content(my_obj.toString()))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(1.99)))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.orderId",
+                                                Is.is("c6586b2e-a943-481f-a4e3-e768aff9e029")))
+                                .andExpect(status().isOk()).andReturn();
+
+                my_obj = new JSONObject();
+
+                my_obj.put("customerId", "cba3ff2e-3087-49bd-bc9b-285e809e7b32");
+                my_obj.put("orderTotalValue", 1.99f);
+                my_obj.put("orderPaymentMethod", "credit_card");
+                my_obj.put("orderNumber", 123123);
+                my_obj.put("orderId", "0aa4a5ca-9312-498c-a423-7e62ab48215e");
+
+                mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
+                                .content(my_obj.toString()))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.orderTotalValue", Is.is(1.99)))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.orderId",
+                                                Is.is("0aa4a5ca-9312-498c-a423-7e62ab48215e")))
                                 .andExpect(status().isOk()).andReturn();
 
         }
