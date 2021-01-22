@@ -4,8 +4,11 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -21,7 +24,9 @@ public class Order {
     private UUID orderId;
 
     @NotNull(message = "Invalid customer id format")
-    private UUID customerId;
+    @OneToOne()
+    @JoinColumn(name = "customerId", referencedColumnName = "customerId")
+    private Customer customer;
 
     @NotNull(message = "Value should not be empty")
     private Float orderTotalValue;
@@ -32,6 +37,7 @@ public class Order {
     private String orderDescription;
 
     @NotNull(message = "Value should not be empty")
+    @Column(columnDefinition = "timestamp with time zone")
     private ZonedDateTime orderCreatedAt;
 
     @NotNull(message = "Value should not be empty")
@@ -42,13 +48,14 @@ public class Order {
     }
 
     public UUID getCustomerId() {
-        return customerId;
+        return customer.getCustomerId();
     }
 
     public void setCustomerId(String customerId) {
         try {
-            this.customerId = UUID.fromString(customerId);
+            setCustomer(new Customer(customerId));
         } catch (IllegalArgumentException e) {
+            this.customer= null;
         }
 
     }
@@ -73,7 +80,7 @@ public class Order {
         try {
             this.orderPaymentMethod = PaymentCategory.valueOf(orderPaymentMethod.toUpperCase());
         } catch (Exception e) {
-            this.orderPaymentMethod= null;
+            this.orderPaymentMethod = null;
         }
 
     }
@@ -104,6 +111,14 @@ public class Order {
 
     public void setOrderNumber(Integer orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Customer getCustomer() {
+        return customer;
     }
 
     public Order() {

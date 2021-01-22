@@ -134,7 +134,7 @@ public class OrderPostRequestsTests {
                                                 Is.is("Value should not be empty")))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.errors.orderNumber",
                                                 Is.is("Value should not be empty")))
-                                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.customerId",
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.errors.customer",
                                                 Is.is("Invalid customer id format")))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
                                 .andExpect(status().isBadRequest()).andReturn();
@@ -152,7 +152,7 @@ public class OrderPostRequestsTests {
                         mockMvc.perform(post("/api/v1/order").contentType(MediaType.APPLICATION_JSON)
                                         .content(my_obj.toString()))
                                         .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is("Not OK")))
-                                        .andExpect(MockMvcResultMatchers.jsonPath("$.errors.customerId",
+                                        .andExpect(MockMvcResultMatchers.jsonPath("$.errors.customer",
                                                         Is.is("Invalid customer id format")))
                                         .andExpect(status().isBadRequest()).andReturn();
                 } catch (JSONException e) {

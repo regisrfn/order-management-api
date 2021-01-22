@@ -13,7 +13,6 @@ import com.rufino.server.service.OrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,14 +75,9 @@ public class OrderController {
     }
 
     @PutMapping("{id}")
-    public Order updateOrder(@PathVariable String id, @Valid @RequestBody Order order, BindingResult bindingResult) {
+    public Order updateOrder(@PathVariable String id, @Valid @RequestBody Order order) {
         try {
             UUID orderId = UUID.fromString(id);
-            Order validatedOrder = new Order();
-
-            if (hasErrorsOrderRequest(order, bindingResult, validatedOrder))
-                return orderService.updateOrder(orderId, validatedOrder);
-
             return orderService.updateOrder(orderId, order);
 
         } catch (IllegalArgumentException e) {
@@ -91,27 +85,4 @@ public class OrderController {
         }
     }
 
-    private boolean hasErrorsOrderRequest(Order order, BindingResult bindingResult, Order validatedOrder) {
-        if (bindingResult.hasErrors()) {
-            // ignore field password
-            if (!bindingResult.hasFieldErrors("customerId")) { 
-                validatedOrder.setCustomerId(order.getCustomerId().toString());
-            }
-            if (!bindingResult.hasFieldErrors("orderTotalValue")) {
-                validatedOrder.setOrderTotalValue(order.getOrderTotalValue());
-            }
-            if (!bindingResult.hasFieldErrors("orderPaymentMethod")) {
-                validatedOrder.setOrderPaymentMethod(order.getOrderPaymentMethod());
-            }
-            if (!bindingResult.hasFieldErrors("orderNumber")) {
-                validatedOrder.setOrderNumber(order.getOrderNumber());
-            }
-            if (!bindingResult.hasFieldErrors("orderCreatedAt")) {
-                validatedOrder.setOrderCreatedAt(order.getOrderCreatedAt());
-            }
-            validatedOrder.setOrderDescription(order.getOrderDescription());
-            return true;
-        }
-        return false;
-    }
 }

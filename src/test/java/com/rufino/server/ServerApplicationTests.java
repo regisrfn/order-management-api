@@ -83,7 +83,8 @@ class ServerApplicationTests {
 
 		assertThat(orderService.getOrderById(order.getOrderId()).getOrderNumber()).isEqualTo(order.getOrderNumber());
 
-		assertThat(orderService.getOrderById(order.getOrderId()).getOrderPaymentMethod().toString()).isEqualTo("CREDIT_CARD");
+		assertThat(orderService.getOrderById(order.getOrderId()).getOrderPaymentMethod().toString())
+				.isEqualTo("CREDIT_CARD");
 
 	}
 
@@ -153,9 +154,9 @@ class ServerApplicationTests {
 		saveAndAssert(order2, 1, 2);
 
 		Order orderToUpdate = new Order();
+		orderToUpdate.setCustomerId("846e1a32-f831-4bee-a6bc-673b5f901d7b");
 		orderToUpdate.setOrderPaymentMethod("cash");
 		orderToUpdate.setOrderTotalValue(5.00f);
-		orderToUpdate.setCustomerId("846e1a32-f831-4bee-a6bc-673b5f901d7b");
 		orderToUpdate.setOrderDescription("Description test");
 		orderToUpdate.setOrderNumber(654321);
 		orderService.updateOrder(order1.getOrderId(), orderToUpdate);
@@ -171,18 +172,6 @@ class ServerApplicationTests {
 		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderNumber())
 				.isEqualTo(orderToUpdate.getOrderNumber());
 
-		orderToUpdate = new Order();
-		orderToUpdate.setCustomerId("cba3ff2e-3087-49bd-bc9b-285e809e7b32");
-		orderService.updateOrder(order1.getOrderId(), orderToUpdate);
-
-		assertThat(orderService.getOrderById(order1.getOrderId()).getCustomerId())
-				.isEqualTo(UUID.fromString("cba3ff2e-3087-49bd-bc9b-285e809e7b32"));
-
-		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderPaymentMethod().toString()).isEqualTo("CASH");
-		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderTotalValue()).isEqualTo(5.00f);
-		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderDescription()).isEqualTo("Description test");
-		assertThat(orderService.getOrderById(order1.getOrderId()).getOrderNumber()).isEqualTo(654321);
-
 	}
 
 	@Test
@@ -195,10 +184,11 @@ class ServerApplicationTests {
 		setOrder(order2, "846e1a32-f831-4bee-a6bc-673b5f901d7b");
 		saveAndAssert(order2, 1, 2);
 
-		Order orderToUpdate = new Order();
+		Order orderToUpdate = order1;
 		orderToUpdate.setCustomerId("c6586b2e-a943-481f-a4e3-e768aff9e029");
 		try {
 			orderService.updateOrder(order1.getOrderId(), orderToUpdate);
+			assert (false);
 		} catch (ApiRequestException e) {
 			// TODO: handle exception
 		}
