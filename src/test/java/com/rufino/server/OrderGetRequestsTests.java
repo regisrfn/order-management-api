@@ -93,7 +93,7 @@ public class OrderGetRequestsTests {
         order.setCustomerId(customerId);
         order.setOrderPaymentMethod("credit_card");
         order.setOrderTotalValue(1.99f);
-        order.setOrderNumber(123456);
+        order.setOrderNumber((int)Math.floor(100000+Math.random()*900000));
     }
 
 }

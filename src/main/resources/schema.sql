@@ -3,6 +3,8 @@
 
 
 -- ************************************** orders 
+-- DROP TABLE orders;
+
 CREATE TABLE IF NOT EXISTS orders
 (
  order_id             uuid NOT NULL,
@@ -11,8 +13,9 @@ CREATE TABLE IF NOT EXISTS orders
  order_description    text NULL,
  order_created_at     timestamp with time zone NOT NULL,
  order_number         int NOT NULL,
- customer_id          uuid NOT NULL,
+ customer_id          uuid NULL,
  CONSTRAINT PK_order PRIMARY KEY ( order_id ),
+ CONSTRAINT uk_order_number UNIQUE ( order_number ),
  CONSTRAINT fk_customer_order FOREIGN KEY ( customer_id ) REFERENCES customers ( customer_id ) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
