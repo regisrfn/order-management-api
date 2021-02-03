@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import com.rufino.server.exception.ApiRequestException;
 import com.rufino.server.model.Order;
+import com.rufino.server.model.PageResponse;
 import com.rufino.server.service.OrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,6 +45,13 @@ public class OrderController {
     @GetMapping
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
+    }
+
+    @GetMapping("page")
+    public PageResponse getAllOrders(@RequestParam(name = "number", defaultValue = "0") int number,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+
+        return orderService.getPage(number, size);
     }
 
     @GetMapping("{id}")

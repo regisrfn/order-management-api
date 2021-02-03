@@ -8,6 +8,9 @@ import com.rufino.server.dao.OrderDao;
 import com.rufino.server.model.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -39,7 +42,8 @@ public class OrderRepository implements OrderDao {
 
     @Override
     public List<Order> getAll() {
-        return jpaDataAccess.findAll();
+        Sort sort = Sort.by("orderCreatedAt").descending();
+        return jpaDataAccess.findAll(sort);
     }
 
     @Override
@@ -51,5 +55,12 @@ public class OrderRepository implements OrderDao {
     public Order updateOrder(UUID id, Order order) {
         order.setOrderId(id);
         return jpaDataAccess.save(order);
+    }
+
+    @Override
+    public Page<Order> getPage(int page, int size) {
+        Sort sort = Sort.by("orderCreatedAt").descending();
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        return jpaDataAccess.findAll(pageRequest);
     }
 }
