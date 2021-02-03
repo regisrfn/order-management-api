@@ -24,14 +24,15 @@ public class Customer {
 
     @NotBlank(message = "Value should not be empty")
     private String customerName;
-    
+
     @NotBlank(message = "Value should not be empty")
     private String customerLastName;
-    
+
     @NotBlank(message = "Value should not be empty")
     private String customerPhone;
 
     @NotBlank(message = "Value should not be empty")
+    @Column(unique = true)
     private String customerEmail;
 
     @NotNull(message = "Value should not be empty")
@@ -88,9 +89,9 @@ public class Customer {
         this.customerCreatedAt = customerCreatedAt;
     }
 
-	public UUID getCustomerId() {
-		return customerId;
-	}
+    public UUID getCustomerId() {
+        return customerId;
+    }
 
     public void setCustomerId(UUID customerId) {
         this.customerId = customerId;
